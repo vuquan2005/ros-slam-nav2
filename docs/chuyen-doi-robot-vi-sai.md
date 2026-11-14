@@ -1,36 +1,32 @@
-# Chuyển sang robot vi sai hai bánh dùng LiDAR
+# Lộ trình robot vi sai dùng LiDAR
 
-Đây là danh sách công việc chuẩn bị; mã nguồn hiện tại chưa được chuyển sang robot mới. Giữ các package cũ để đối chiếu trong quá trình thay từng phần.
+## Bộ khung hiện tại
 
-## Những phần cần thay
+Workspace có ba package mới: `dif_description`, `dif_gazebo`, `dif_bringup`. Mô hình dùng hình học cơ bản, hai bánh chủ động, hai bánh đỡ ma sát thấp, plugin DiffDrive và LiDAR 2D. Mã Mecanum/pallet cũ đã được bỏ khỏi dự án.
 
-| Thành phần | Hiện tại | Công việc cho robot mới |
-| --- | --- | --- |
-| Mô hình robot | 4 bánh Mecanum, càng nâng, camera | Hai bánh chủ động trái/phải, bánh đỡ, khung và `laser_frame` đúng kích thước thực |
-| Điều khiển | `kinematics_node.py` xuất 4 vận tốc bánh | Điều khiển vi sai với bán kính bánh và khoảng cách hai bánh thực tế; không nhận chuyển động ngang |
-| Gazebo | `PlanarVelocityControl` áp vận tốc trực tiếp lên thân | Thay bằng mô phỏng truyền động hai bánh; bỏ plugin toàn hướng để tránh hai nguồn điều khiển |
-| Odometry | Ground truth từ Gazebo | Odometry từ truyền động khi mô phỏng và encoder khi chạy thật; một nguồn phát TF `odom` đến thân robot |
-| LiDAR | Chưa có | Thêm mô hình cảm biến, `/scan` và bridge mô phỏng; driver theo model LiDAR khi chạy thật |
-| Điều khiển tay | Có `linear.y` và nâng hàng | Chỉ dùng tiến/lùi và quay; bỏ các lệnh nâng nếu robot không có cơ cấu này |
-| Dẫn đường | Dò line, tọa độ sa bàn và nhiệm vụ pallet | Thêm SLAM, lưu bản đồ, định vị và cấu hình Nav2 cho robot vi sai |
-| Bringup | Launch mô phỏng và ứng dụng pallet | Tách launch mô phỏng/chạy thật; các tính năng pallet chỉ bật khi cần |
+Đây là cấu hình ban đầu, chưa hiệu chỉnh kích thước thực và chưa tích hợp SLAM/Nav2/phần cứng. Xem [hướng dẫn chạy](../README.md).
 
-`robot0_navigation` hiện là nhiệm vụ pallet tự viết, chưa phải cấu hình Nav2 cho LiDAR. Các package vision, dò line và mesh cơ cấu nâng chỉ nên loại bỏ sau khi mô hình và launch mới không còn tham chiếu đến chúng.
+## Các bước tiếp theo
 
-## Thông số cần xác định trước khi cấu hình
+1. Build trong môi trường Humble/Fortress, kiểm tra spawn và RViz.
+2. Kiểm tra tiến/lùi, quay tại chỗ, odometry và TF từ `odom` đến `laser_frame`.
+3. Kiểm tra `/scan`, thời gian mô phỏng và vật cản trong phòng thử.
+4. Hiệu chỉnh kích thước, khối lượng, vị trí LiDAR và giới hạn vận tốc theo robot thực.
+5. Thêm SLAM, lưu bản đồ rồi cấu hình định vị và Nav2 cho robot vi sai.
+6. Thêm driver LiDAR thật, giao tiếp board động cơ, odometry encoder/IMU và watchdog độc lập.
+7. Xây dựng nhiệm vụ đến bàn và quay về điểm xuất phát sau khi điều hướng đạt yêu cầu.
 
-- Bán kính bánh trái/phải, khoảng cách giữa tâm hai bánh, kích thước và khối lượng khung.
-- Vị trí bánh đỡ và vị trí, hướng lắp LiDAR so với `base_link`.
-- Model LiDAR, giao tiếp USB/serial/Ethernet và tên frame do driver phát.
-- Board điều khiển động cơ, giao thức kết nối, độ phân giải encoder và tỉ số truyền.
-- Giới hạn vận tốc, gia tốc và timeout dừng khi mất lệnh.
-- Phiên bản ROS/Gazebo sẽ dùng; cấu hình cũ trong devcontainer là Humble/Fortress.
+## Thông số cần đo
 
-## Trình tự thực hiện
+- Bán kính bánh trái/phải và khoảng cách giữa tâm hai bánh.
+- Kích thước khung, khối lượng, vị trí trọng tâm và bánh đỡ.
+- Model LiDAR, vị trí/hướng lắp, giao tiếp và tần số quét.
+- Board động cơ, giao thức kết nối, độ phân giải encoder và tỉ số truyền.
+- Giới hạn vận tốc/gia tốc, thời gian dừng khi mất lệnh và sai số odometry.
 
-1. Tạo mô hình robot hai bánh và kiểm tra TF, chiều quay khớp, collision và quán tính.
-2. Thay truyền động trong Gazebo, kiểm tra tiến/lùi, quay tại chỗ và dừng khi mất lệnh.
-3. Thêm LiDAR và `/scan`; kiểm tra vật cản hiển thị đúng trong RViz.
-4. Kiểm tra chuỗi TF từ `odom` qua thân robot đến `laser_frame`, thời gian mô phỏng và odometry.
-5. Thêm SLAM, lưu bản đồ rồi cấu hình định vị và Nav2.
-6. Kết nối phần cứng, hiệu chỉnh odometry và chỉ sau đó gỡ các tài nguyên cũ không còn sử dụng.
+## Tiêu chí nghiệm thu ban đầu
+
+- Robot tiến theo trục X, quay đúng chiều; không nhận điều khiển trượt ngang.
+- Mỗi quan hệ TF có một nguồn phát; dấu thời gian đồng bộ với `/clock`.
+- LiDAR quét thấy tường đúng vị trí, không lệch frame hoặc mất scan kéo dài.
+- Đo và ghi lại sai số quãng đường, góc quay và độ ổn định trước khi cấu hình điều hướng.

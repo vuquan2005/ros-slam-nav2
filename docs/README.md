@@ -1,24 +1,11 @@
 # Tài liệu dự án
 
-- [Tài liệu Word gốc](<Đồ án CĐT.docx>).
-- [Bản Markdown](do-an-cdt.md).
-- [Ảnh và tài nguyên trích xuất](assets/do-an-cdt/media/).
-- [Kế hoạch chuyển đổi robot vi sai hai bánh dùng LiDAR](chuyen-doi-robot-vi-sai.md).
+- [Phân tích mục tiêu, kỹ thuật và bằng chứng trong báo cáo](phan-tich-bao-cao.md).
+- [Báo cáo Markdown gốc](report-old/do-an-cdt.md).
+- [Tài liệu Word gốc](<report-old/Đồ án CĐT.docx>).
+- [Ảnh trích xuất](report-old/assets/do-an-cdt/media/).
+- [Lộ trình triển khai robot mới](chuyen-doi-robot-vi-sai.md).
 
-## Bản chuyển đổi
+Báo cáo năm 2022 là tài liệu tham khảo về robot phục vụ lễ tân, không phải mô tả triển khai của workspace hiện tại. Bản Markdown giữ bảng HTML, bookmark và đường dẫn ảnh tương đối. Số trang trong mục lục thuộc bản Word.
 
-`do-an-cdt.md` được chuyển từ Word bằng Pandoc, giữ nội dung tham khảo gốc về robot phục vụ lễ tân. Nội dung này không mô tả trạng thái triển khai của workspace hiện tại.
-
-Các bảng phức tạp và công thức được trình bày bằng bảng HTML nhúng để giữ cấu trúc hàng/cột. Ảnh dùng đường dẫn tương đối; bookmark và mục lục được giữ lại. Số trang trong mục lục thuộc bản Word, không phải phân trang Markdown. Các đoạn code và ảnh chụp code giữ nguyên như tài liệu nguồn, chưa được kiểm thử chạy.
-
-Thư mục tài nguyên chứa đủ 64 ảnh gốc; 60 ảnh được bản Markdown tham chiếu. Bốn ảnh `image2.png`, `image3.png`, `image4.png`, `image5.jpeg` không được Pandoc đưa vào phần nội dung chuyển đổi và vẫn được giữ để đối chiếu. File Word gốc được giữ nguyên để kiểm tra bố cục khi cần.
-
-## Tạo lại bản Markdown
-
-Cần Python 3 và Pandoc trên `PATH`. Tại thư mục gốc workspace:
-
-```bash
-python3 tools/convert-docx.py 'docs/Đồ án CĐT.docx' docs/do-an-cdt.md
-```
-
-Có thể chỉ định bản Pandoc cài riêng bằng `--pandoc /duong/dan/pandoc`. Script tạo lại bản Markdown và trích xuất toàn bộ ảnh vào `docs/assets/do-an-cdt/media/`.
+Thư mục tài nguyên chứa 64 ảnh gốc; 60 ảnh được Markdown tham chiếu. Các đoạn code và ảnh chụp code giữ theo tài liệu nguồn, chưa được kiểm thử. Script chuyển đổi/Pandoc không phải phụ thuộc build hoặc chạy robot.

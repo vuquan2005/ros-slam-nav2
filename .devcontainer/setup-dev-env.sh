@@ -1,58 +1,47 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+set -euo pipefail
+workspace_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-WORKSPACE_DIR="$(dirname "$SCRIPT_DIR")"
-
-echo "=========================================="
-echo " Setting up Dev Environment (Oh My Bash & ble.sh)"
-echo "=========================================="
-
-# 1. Install Oh My Bash (Shallow clone)
-OSH_DIR="$HOME/.oh-my-bash"
-if [ ! -d "$OSH_DIR" ]; then
-    echo "[1/4] Installing Oh My Bash..."
-    git clone --depth=1 https://github.com/ohmybash/oh-my-bash.git "$OSH_DIR"
-else
-    echo "[1/4] Oh My Bash already installed."
+# Install shell customizations in the container user account.
+if [ ! -d "$HOME/.oh-my-bash" ]; then
+    git clone --depth=1 https://github.com/ohmybash/oh-my-bash.git "$HOME/.oh-my-bash"
 fi
 
-# 2. Install ble.sh (Pre-built binary for real-time syntax highlighting & autosuggestions)
-BLE_DIR="$HOME/.local/share/blesh"
-if [ ! -f "$BLE_DIR/ble.sh" ]; then
-    echo "[2/4] Installing ble.sh..."
-    mkdir -p "$HOME/.local/share"
-    curl -fsSL https://github.com/akinomyoga/ble.sh/releases/download/nightly/ble-nightly.tar.xz | tar xJf - -C "$HOME/.local/share/"
-    mv "$HOME/.local/share/ble-nightly" "$BLE_DIR"
-else
-    echo "[2/4] ble.sh already installed."
+ble_dir="$HOME/.local/share/blesh"
+if [ ! -f "$ble_dir/ble.sh" ]; then
+    ble_tmp_dir="$(mktemp -d)"
+    trap 'rm -rf -- "$ble_tmp_dir"' EXIT
+    curl --fail --location --retry 3 \
+        https://github.com/akinomyoga/ble.sh/releases/download/nightly/ble-nightly.tar.xz \
+        --output "$ble_tmp_dir/ble.tar.xz"
+    tar -xJf "$ble_tmp_dir/ble.tar.xz" -C "$ble_tmp_dir"
+    mkdir -p "$ble_dir"
+    cp -a "$ble_tmp_dir/ble-nightly/." "$ble_dir/"
 fi
 
-# 3. Configure ~/.bashrc
-echo "[3/4] Configuring ~/.bashrc..."
-if [ -f "$SCRIPT_DIR/.bashrc" ]; then
-    cp "$SCRIPT_DIR/.bashrc" "$HOME/.bashrc"
+cp "$workspace_dir/.devcontainer/.bashrc" "$HOME/.bashrc"
+
+# A named volume keeps history across container rebuilds. Seed only once.
+history_file="$HOME/.bash_history"
+if [ -d /commandhistory ]; then
+    sudo chown "$(id -u):$(id -g)" /commandhistory
+    history_file=/commandhistory/.bash_history
+    if [ -f "$history_file" ]; then
+        sudo chown "$(id -u):$(id -g)" "$history_file"
+    fi
 fi
-
-# 4. Populate and persist Command History
-echo "[4/4] Configuring persistent shell history..."
-SEED_FILE="$SCRIPT_DIR/history_seed.txt"
-
-if [ -d "/commandhistory" ] && [ -w "/commandhistory" ]; then
-    if [ ! -s "/commandhistory/.bash_history" ] && [ -f "$SEED_FILE" ]; then
-        cp "$SEED_FILE" "/commandhistory/.bash_history"
+if [ ! -s "$history_file" ]; then
+    if [ -s "$HOME/.bash_history" ] && [ "$history_file" != "$HOME/.bash_history" ]; then
+        cp "$HOME/.bash_history" "$history_file"
+    else
+        cp "$workspace_dir/.devcontainer/history_seed.txt" "$history_file"
     fi
 fi
 
-if [ ! -s "$HOME/.bash_history" ] && [ -f "$SEED_FILE" ]; then
-    cp "$SEED_FILE" "$HOME/.bash_history"
-fi
-
-# 5. Install agy CLI if needed
-if ! command -v agy >/dev/null 2>&1; then
-    curl -fsSL https://antigravity.google/cli/install.sh | bash || true
-fi
-
-echo "=========================================="
-echo " Dev environment setup complete!"
-echo "=========================================="
+# ROS setup scripts do not consistently support nounset.
+set +u
+source /opt/ros/humble/setup.bash
+rosdep update --rosdistro humble
+cd "$workspace_dir"
+rosdep install --from-paths src --ignore-src --rosdistro humble -r -y
+printf '\nROS DIF ready. Run: colcon build --symlink-install --base-paths src\n'

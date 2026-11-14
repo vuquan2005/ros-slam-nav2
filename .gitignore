@@ -2,7 +2,6 @@
 build/
 install/
 log/
-COLCON_IGNORE
 *.orig
 
 # Python Artifacts

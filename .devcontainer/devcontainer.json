@@ -1,55 +1,40 @@
 {
-  "name": "ROS 2 Humble + Gazebo",
+  "name": "ROS DIF · Humble + Fortress",
   "build": {
     "dockerfile": "Dockerfile",
     "args": {
-      "USERNAME": "vscode"
+      "USERNAME": "ros"
     }
   },
-  "remoteUser": "vscode",
+  "remoteUser": "ros",
   "updateRemoteUserUID": true,
-  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/${localWorkspaceFolderBasename},type=bind",
-  "privileged": true,
+  "workspaceFolder": "/workspaces/ros-dif",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/ros-dif,type=bind",
   "runArgs": [
     "--network=host",
-    "--ipc=host",
-    "--gpus=all",
-    "--privileged"
+    "--ipc=host"
   ],
   "mounts": [
     "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind",
-    "source=/dev,target=/dev,type=bind",
-    "source=/run/udev,target=/run/udev,type=bind,readonly",
-    "source=vscode-commandhistory,target=/commandhistory,type=volume"
+    "source=ros-dif-commandhistory,target=/commandhistory,type=volume"
   ],
   "containerEnv": {
     "DISPLAY": "${localEnv:DISPLAY}",
-    "NVIDIA_VISIBLE_DEVICES": "all",
-    "NVIDIA_DRIVER_CAPABILITIES": "all",
-    "__NV_PRIME_RENDER_OFFLOAD": "1",
-    "__GLX_VENDOR_LIBRARY_NAME": "nvidia",
-    "QT_X11_NO_MITSHM": "1"
+    "QT_X11_NO_MITSHM": "1",
+    "LIBGL_ALWAYS_SOFTWARE": "1",
+    "ROS_DIF_WORKSPACE": "/workspaces/ros-dif"
   },
   "customizations": {
     "vscode": {
       "extensions": [
-        "ranch-hand-robotics.rde-pack",
-        "ms-vscode.cpptools",
         "ms-python.python",
+        "ms-vscode.cpptools",
         "ms-vscode.cmake-tools",
-        "dotjoshjohnson.xml",
         "redhat.vscode-yaml",
-        "esbenp.prettier-vscode"
+        "dotjoshjohnson.xml"
       ],
       "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash",
-        "files.associations": {
-          "*.xacro": "xml",
-          "*.world": "xml",
-          "*.urdf": "xml",
-          "*.sdf": "xml"
-        }
+        "terminal.integrated.defaultProfile.linux": "bash"
       }
     }
   },
