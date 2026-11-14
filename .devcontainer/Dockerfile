@@ -10,7 +10,7 @@ RUN apt-get update \
         build-essential cmake git sudo curl ca-certificates gawk xz-utils \
         python3-colcon-common-extensions python3-rosdep python3-yaml \
         ros-humble-ros-gz ros-humble-xacro \
-        ros-humble-robot-state-publisher ros-humble-joint-state-publisher-gui \
+        ros-humble-robot-state-publisher ros-humble-joint-state-publisher \
         ros-humble-teleop-twist-keyboard \
         libgl1-mesa-dri libegl1-mesa mesa-utils \
     && rm -rf /var/lib/apt/lists/*

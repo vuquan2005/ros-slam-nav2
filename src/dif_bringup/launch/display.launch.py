@@ -16,7 +16,7 @@ def generate_launch_description():
                  FindExecutable(name='xacro'), ' ',
                  os.path.join(description, 'urdf', 'dif.urdf.xacro'),
              ]), value_type=str)}]),
-        Node(package='joint_state_publisher_gui', executable='joint_state_publisher_gui'),
+        Node(package='joint_state_publisher', executable='joint_state_publisher'),
         Node(package='rviz2', executable='rviz2', arguments=[
             '-d', os.path.join(description, 'rviz', 'display.rviz'),
         ]),
