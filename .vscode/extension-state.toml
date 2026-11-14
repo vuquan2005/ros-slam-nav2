@@ -1,0 +1,9 @@
+# Python: editor support, language server, debugger, environments and formatter.
+# Independent copy; edit for this project. Omitted IDs inherit global state.
+# Add Jupyter extensions separately for notebook projects.
+[extensions]
+"ms-python.python" = true
+"ms-python.vscode-pylance" = true
+"ms-python.debugpy" = true
+"ms-python.vscode-python-envs" = true
+"ms-python.black-formatter" = true
