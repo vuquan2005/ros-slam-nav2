@@ -12,7 +12,8 @@ teleop_twist_joy_node:
     axis_linear:
       x: 1
     scale_linear:
-      x: 0.25
+      # Jumper T20: pushing the forward/back stick forward gives a negative axis 1.
+      x: -0.25
     axis_angular:
       yaw: 0
     scale_angular:
