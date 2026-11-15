@@ -34,6 +34,16 @@
       }
     },
     {
+      "label": "ROS DIF: SLAM mapping",
+      "type": "shell",
+      "command": "source /opt/ros/humble/setup.bash && if [ -f install/setup.bash ]; then source install/setup.bash; fi && ros2 launch dif_bringup slam.launch.py",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
       "label": "ROS DIF: display model",
       "type": "shell",
       "command": "source /opt/ros/humble/setup.bash && if [ -f install/setup.bash ]; then source install/setup.bash; fi && ros2 launch dif_bringup display.launch.py",

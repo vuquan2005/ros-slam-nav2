@@ -1,52 +1,218 @@
 Panels:
   - Class: rviz_common/Displays
+    Help Height: 70
     Name: Displays
+    Property Tree Widget:
+      Expanded: ~
+      Splitter Ratio: 0.5
+    Tree Height: 126
+  - Class: rviz_common/Views
+    Expanded:
+      - /Current View1
+    Name: Views
+    Splitter Ratio: 0.5
 Visualization Manager:
   Class: ""
-  Global Options:
-    Fixed Frame: odom
-    Frame Rate: 30
-    Background Color: 48; 48; 48
   Displays:
-    - Class: rviz_default_plugins/Grid
-      Name: Grid
-      Enabled: true
+    - Alpha: 0.5
       Cell Size: 1
-      Plane Cell Count: 20
-    - Class: rviz_default_plugins/RobotModel
-      Name: Robot
+      Class: rviz_default_plugins/Grid
+      Color: 160; 160; 164
       Enabled: true
-      Description Source: Topic
-      Description Topic:
-        Value: /robot_description
-        Durability Policy: Transient Local
-        Reliability Policy: Reliable
-        History Policy: Keep Last
-        Depth: 1
-    - Class: rviz_default_plugins/TF
-      Name: TF
-      Enabled: true
-    - Class: rviz_default_plugins/LaserScan
-      Name: LiDAR
-      Enabled: true
-      Topic:
-        Value: /scan
-        Reliability Policy: Best Effort
-        Durability Policy: Volatile
-        History Policy: Keep Last
-        Depth: 5
-      Size (m): 0.03
-      Style: Points
-  Views:
-    Current:
-      Class: rviz_default_plugins/Orbit
-      Distance: 5
-      Pitch: 0.65
-      Yaw: 0.7
-      Focal Point:
+      Line Style:
+        Line Width: 0.029999999329447746
+        Value: Lines
+      Name: Grid
+      Normal Cell Count: 0
+      Offset:
         X: 0
         Y: 0
         Z: 0
+      Plane: XY
+      Plane Cell Count: 20
+      Reference Frame: <Fixed Frame>
+      Value: true
+    - Alpha: 1
+      Class: rviz_default_plugins/RobotModel
+      Collision Enabled: false
+      Description File: ""
+      Description Source: Topic
+      Description Topic:
+        Depth: 1
+        Durability Policy: Transient Local
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /robot_description
+      Enabled: true
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+        base_footprint:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        front_caster_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        laser_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rear_caster_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+      Mass Properties:
+        Inertia: false
+        Mass: false
+      Name: Robot
+      TF Prefix: ""
+      Update Interval: 0
+      Value: true
+      Visual Enabled: true
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+        base_footprint:
+          Value: true
+        base_link:
+          Value: true
+        front_caster_link:
+          Value: true
+        laser_frame:
+          Value: true
+        left_wheel_link:
+          Value: true
+        odom:
+          Value: true
+        rear_caster_link:
+          Value: true
+        right_wheel_link:
+          Value: true
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: false
+      Tree:
+        odom:
+          base_footprint:
+            base_link:
+              front_caster_link:
+                {}
+              laser_frame:
+                {}
+              left_wheel_link:
+                {}
+              rear_caster_link:
+                {}
+              right_wheel_link:
+                {}
+      Update Interval: 0
+      Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz_default_plugins/LaserScan
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 0
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: LiDAR
+      Position Transformer: XYZ
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.029999999329447746
+      Style: Points
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Best Effort
+        Value: /scan
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
+  Enabled: true
+  Global Options:
+    Background Color: 48; 48; 48
+    Fixed Frame: odom
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+  Transformation:
+    Current:
+      Class: rviz_default_plugins/TF
+  Value: true
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Distance: 7.8675971031188965
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.05999999865889549
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+        Value: false
+      Focal Point:
+        X: -0.04849547892808914
+        Y: -0.04294518753886223
+        Z: 0.8559148907661438
+      Focal Shape Fixed Size: true
+      Focal Shape Size: 0.05000000074505806
+      Invert Z Axis: false
+      Name: Current View
+      Near Clip Distance: 0.009999999776482582
+      Pitch: 1.5497963428497314
+      Target Frame: odom
+      Value: Orbit (rviz_default_plugins)
+      Yaw: 1.5649994611740112
+    Saved: ~
 Window Geometry:
-  Width: 1200
-  Height: 800
+  Displays:
+    collapsed: false
+  Height: 1014
+  Hide Left Dock: false
+  Hide Right Dock: false
+  QMainWindow State: 000000ff00000000fd0000000100000003000003c00000011afc0100000001fc00000000000003c00000015600fffffffa000000000200000002fb000000100044006900730070006c0061007900730100000000ffffffff000000c700fffffffb0000000a0056006900650077007301000002c10000011a000000a000ffffff000003c00000028000000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Views:
+    collapsed: false
+  Width: 960
+  X: 960
+  Y: 29

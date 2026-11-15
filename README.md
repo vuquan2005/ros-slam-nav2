@@ -8,7 +8,7 @@ Bộ khung ROS 2 Humble và Gazebo Fortress cho robot vi sai hai bánh chủ đ�
 - Plugin DiffDrive của Gazebo điều khiển hai khớp bánh; odometry từ chuyển động bánh trong mô phỏng.
 - LiDAR 360 độ, 720 mẫu, 10 Hz; phòng 6 × 6 m với một vật cản.
 - Bridge `/clock`, `/cmd_vel`, `/odom`, `/tf`, `/joint_states`, `/scan` và cấu hình RViz.
-- Chưa tích hợp SLAM, Nav2, nhiệm vụ phục vụ bàn hoặc driver phần cứng.
+- SLAM Toolbox tạo bản đồ từ LiDAR; chưa tích hợp điều hướng Nav2, nhiệm vụ phục vụ bàn hoặc driver phần cứng.
 
 Kích thước, khối lượng và thông số cảm biến là giá trị khởi tạo, chưa được hiệu chỉnh theo robot thực. Sửa tại `src/dif_description/urdf/dif.urdf.xacro` và `gazebo.xacro`.
 
@@ -85,6 +85,72 @@ odom → base_footprint → base_link → laser_frame
 
 Gazebo phát `odom → base_footprint` và joint states; `robot_state_publisher` phát các biến đổi bên trong robot. Không chạy thêm `joint_state_publisher_gui` cùng launch mô phỏng.
 
+## Tạo bản đồ bằng SLAM
+
+Với container đã tạo trước khi thêm SLAM, cài gói trong terminal container (không cần rebuild container):
+
+```bash
+sudo apt-get update
+sudo apt-get install -y ros-humble-slam-toolbox ros-humble-nav2-map-server
+colcon build --symlink-install --base-paths src
+source install/setup.bash
+```
+
+Dừng launch mô phỏng/display cũ trước, rồi chạy lệnh dưới hoặc task **ROS DIF: SLAM mapping**.
+Launch này đã bao gồm Gazebo, RViz và SLAM; không chạy thêm `sim.launch.py` song song.
+
+```bash
+ros2 launch dif_bringup slam.launch.py
+```
+
+Trong terminal khác, chạy teleop, giảm tốc độ bằng `z` và đưa robot đi chậm quanh phòng.
+Quan sát Map trong RViz (Fixed Frame `map`), đi qua các khu vực chưa quét và quay lại vị trí ban đầu.
+Nhấn `k` để dừng. Bản đồ cập nhật mỗi 2 giây theo thời gian mô phỏng.
+SLAM phát TF `map → odom`, nối vào cây TF đã có.
+
+Launch SLAM nạp `src/dif_description/rviz/slam.rviz` (Fixed Frame và camera Target Frame là `map`).
+Launch mô phỏng thường nạp `dif.rviz` (frame `odom`); launch xem mô hình nạp `display.rviz` (frame `base_footprint`).
+Trong Gazebo Fortress, để ẩn bảng bên phải, nhấp phải vào từng plugin **Component Inspector** và **Entity Tree**, chọn **Close**.
+Mở lại các plugin qua nút ba chấm góc trên phải. Tham khảo [giao diện Fortress](https://gazebosim.org/docs/fortress/gui/).
+Chọn **Save client configuration** trong menu góc trên trái để lưu vào
+`~/.ignition/gazebo/6/gui.config` bên trong container. Muốn giữ qua lần tạo lại container,
+chọn **Save client configuration as** và lưu thành
+`/workspaces/ros-dif/src/dif_gazebo/config/gui.config`, sau đó chạy:
+
+```bash
+ros2 launch dif_bringup slam.launch.py gui_config:="$(pwd)/src/dif_gazebo/config/gui.config"
+```
+
+`sim.launch.py` cũng nhận `gui_config:=/duong/dan/gui.config`.
+Để trống tham số sẽ dùng cấu hình mặc định của Gazebo; `gui:=false` bỏ qua GUI config.
+
+
+```bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+```
+
+Khi bản đồ rõ tường và vật cản, giữ SLAM đang chạy và lưu từ terminal khác tại thư mục workspace:
+
+```bash
+mkdir -p maps
+ros2 run nav2_map_server map_saver_cli -f maps/room --ros-args -p use_sim_time:=true -p map_subscribe_transient_local:=true
+```
+
+Kết quả là `maps/room.yaml` và ảnh bản đồ `maps/room.pgm`, dùng cho định vị/Nav2 sau này.
+Đây là bản đồ occupancy để điều hướng; không chứa pose graph để tiếp tục phiên SLAM.
+Kiểm tra dữ liệu nếu chưa thấy bản đồ:
+
+```bash
+ros2 topic hz /scan
+ros2 topic echo /map --once --field info
+ros2 run tf2_ros tf2_echo map base_footprint
+```
+
+Cấu hình tại `src/dif_bringup/config/slam.yaml`, dựa trên
+[launch Humble của SLAM Toolbox](https://github.com/SteveMacenski/slam_toolbox/blob/humble/launch/online_async_launch.py).
+Ngưỡng góc quay là 0.1 rad. Ngưỡng tịnh tiến đặt 0.0 m vì bộ lọc scan bên ngoài của
+SLAM Toolbox Humble chỉ xét khoảng cách tịnh tiến; đặt khác 0 sẽ bỏ qua scan khi robot quay tại chỗ.
+
 ## Kiểm tra cấu trúc trước khi chạy
 
 Trong môi trường có `xacro` và `python3-yaml`:
@@ -101,4 +167,4 @@ Bộ kiểm tra xác nhận cây TF liên thông, quán tính hợp lệ, hình 
 - [Báo cáo gốc và tài nguyên](docs/README.md).
 - [Lộ trình triển khai](docs/chuyen-doi-robot-vi-sai.md).
 
-Kiểm tra chuyển động và dữ liệu LiDAR trước, sau đó thêm SLAM, lưu bản đồ, định vị/Nav2 và giao tiếp phần cứng. Tham khảo cấu hình plugin từ [Gazebo DiffDrive](https://gazebosim.org/api/gazebo/6/classignition_1_1gazebo_1_1systems_1_1DiffDrive.html) và [Gazebo Sensors](https://gazebosim.org/docs/fortress/sensors/).
+Kiểm tra chuyển động và dữ liệu LiDAR trước, sau đó chạy SLAM, lưu bản đồ, tích hợp định vị/Nav2 và giao tiếp phần cứng. Tham khảo cấu hình plugin từ [Gazebo DiffDrive](https://gazebosim.org/api/gazebo/6/classignition_1_1gazebo_1_1systems_1_1DiffDrive.html) và [Gazebo Sensors](https://gazebosim.org/docs/fortress/sensors/).
