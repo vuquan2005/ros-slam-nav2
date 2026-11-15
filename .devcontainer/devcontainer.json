@@ -13,11 +13,13 @@
   "runArgs": [
     "--network=host",
     "--ipc=host",
-    "--device=/dev/input:/dev/input",
+    "--device-cgroup-rule=c 13:* rwm",
     "--group-add=104"
   ],
   "mounts": [
     "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind",
+    "source=/dev/input,target=/dev/input,type=bind",
+    "source=/run/udev,target=/run/udev,type=bind,readonly",
     "source=ros-dif-commandhistory,target=/commandhistory,type=volume"
   ],
   "containerEnv": {

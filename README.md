@@ -77,12 +77,16 @@ Dừng keyboard teleop trước khi dùng joystick. Cấu hình chỉ số trong
 
 Các chỉ số/dấu cần đối chiếu với `ros2 topic echo /joy` vì SDL có thể khác `jstest-gtk`.
 
-Dev container truyền toàn bộ `/dev/input` vào container và thêm
-GID 104 (nhóm `input` trên host hiện tại). Cắm tay cầm trước khi chọn
-**Dev Containers: Rebuild Container**; thay đổi thiết bị không áp dụng bằng cách
+Dev container bind-mount toàn bộ `/dev/input`, cho phép thiết bị input (major 13)
+qua cgroup và đọc metadata `/run/udev` để nhận thiết bị khi rút/cắm lại. Thêm
+GID 104 (nhóm `input` trên host hiện tại). Chọn
+**Dev Containers: Rebuild Container** để áp dụng cấu hình; thay đổi này không áp dụng bằng cách
 chỉ mở lại terminal. Nếu đổi host, kiểm tra GID bằng `stat -Lc '%g'` trên thiết bị
 và cập nhật `--group-add` trong `.devcontainer/devcontainer.json`.
-Nếu rút/cắm lại làm đổi device node, tạo lại container để cập nhật ánh xạ thiết bị.
+Sau khi rút/cắm lại, kiểm tra `ros2 run joy joy_enumerate_devices` và chạy lại task joystick
+nếu driver chưa nhận lại. Không cần tạo lại container chỉ vì device node đổi.
+Nếu ID joystick đổi sau khi cắm lại, dùng `device_id:=N` trong launch theo kết quả
+của `joy_enumerate_devices`.
 
 Trong container sau khi tạo lại:
 
