@@ -79,6 +79,32 @@ class WorkspaceTests(unittest.TestCase):
         self.assertEqual(drive.findtext('frame_id'), 'odom')
         self.assertEqual(drive.findtext('child_frame_id'), 'base_footprint')
 
+    def test_rear_drive_axle_and_single_front_support(self):
+        joints = {j.attrib['name']: j for j in self.sim.findall('joint')}
+
+        def origin(name):
+            return [float(v) for v in joints[name].find('origin').attrib['xyz'].split()]
+
+        bx, by, bz = origin('base_joint')
+        for name in ('left_wheel_joint', 'right_wheel_joint'):
+            x, y, z = origin(name)
+            self.assertLess(x, 0, 'Drive wheels must be behind the body centre')
+            self.assertAlmostEqual(bx + x, 0, msg='Ground frame must lie on drive axle')
+            child = joints[name].find('child').attrib['link']
+            radius = float(self.sim.find(
+                f"link[@name='{child}']/collision/geometry/cylinder").attrib['radius'])
+            self.assertAlmostEqual(bz + z - radius, 0)
+        self.assertAlmostEqual(by, 0)
+        casters = {link.attrib['name'] for link in self.sim.findall('link')
+                   if link.attrib['name'].endswith('_caster_link')}
+        self.assertEqual(casters, {'front_caster_link'})
+        x, y, z = origin('front_caster_joint')
+        self.assertGreater(x, 0)
+        self.assertAlmostEqual(y, 0)
+        radius = float(self.sim.find(
+            "link[@name='front_caster_link']/collision/geometry/sphere").attrib['radius'])
+        self.assertAlmostEqual(bz + z - radius, 0)
+
     def test_lidar_and_bridge_contract(self):
         bridges = yaml.safe_load((ROOT / 'src/dif_gazebo/config/bridge.yaml').read_text())
         by_topic = {b['ros_topic_name']: b for b in bridges}

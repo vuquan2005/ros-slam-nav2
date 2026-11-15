@@ -4,7 +4,7 @@ Bộ khung ROS 2 Humble và Gazebo Fortress cho robot vi sai hai bánh chủ đ�
 
 ## Phạm vi ban đầu
 
-- Mô hình hình học đơn giản: hai bánh chủ động và hai bánh đỡ thụ động dạng cầu ma sát thấp.
+- Mô hình hình học đơn giản: hai bánh chủ động ở phía sau (x = -0.15 m so với tâm thân) và một bánh đỡ đa hướng phía trước (x = +0.15 m), mô phỏng bằng cầu ma sát thấp.
 - Plugin DiffDrive của Gazebo điều khiển hai khớp bánh; odometry từ chuyển động bánh trong mô phỏng.
 - LiDAR 360 độ, 720 mẫu, 10 Hz; phòng 6 × 6 m với một vật cản.
 - Bridge `/clock`, `/cmd_vel`, `/odom`, `/tf`, `/joint_states`, `/scan` và cấu hình RViz.
@@ -71,6 +71,7 @@ Dừng keyboard teleop trước khi dùng joystick. Cấu hình chỉ số trong
 `src/dif_bringup/config/joy.yaml`:
 
 - `axis 1`: tiến/lùi; `axis 0`: quay.
+- Với Jumper T20 đang dùng, đẩy cần tiến cho `axis 1` âm; `scale_linear.x: -0.25` đổi thành vận tốc tiến dương.
 - Không dùng axis 2 và không cần btn; `require_enable_button: false`.
 - Tối đa 0.25 m/s và 0.5 rad/s, tỷ lệ với độ lệch cần. Đưa axis 0 và axis 1 về giữa để dừng.
 - Dùng trực tiếp `teleop_twist_joy`; không có timeout mất `/joy` trong cấu hình này.
@@ -106,7 +107,7 @@ ros2 topic echo /cmd_vel
 
 Để thử bộ chuyển đổi mà không điều khiển robot, chạy
 `ros2 launch dif_bringup joy.launch.py start_joy:=false cmd_vel:=/cmd_vel_test`.
-Phát Joy giả `[axis 0, axis 1] = [0.0, 1.0]`, `buttons: []` sẽ cho tốc độ tiến 0.25 m/s;
+Phát Joy giả `[axis 0, axis 1] = [0.0, -1.0]`, `buttons: []` sẽ cho tốc độ tiến 0.25 m/s;
 đưa cả hai axis về 0 sẽ dừng.
 
 ## Kiểm tra sau khi khởi chạy
@@ -124,11 +125,12 @@ Trong RViz, chọn fixed frame `odom`. LiDAR phải có `frame_id: laser_frame`,
 odom → base_footprint → base_link → laser_frame
                               ├→ left_wheel_link
                               ├→ right_wheel_link
-                              ├→ front_caster_link
-                              └→ rear_caster_link
+                              └→ front_caster_link
 ```
 
 Gazebo phát `odom → base_footprint` và joint states; `robot_state_publisher` phát các biến đổi bên trong robot. Không chạy thêm `joint_state_publisher_gui` cùng launch mô phỏng.
+
+`base_footprint` nằm trên mặt đất tại trung điểm trục hai bánh chủ động. `base_link` ở tâm thân, cách mốc này 0.15 m về trước và 0.13 m lên trên. Các trục +X hướng trước, +Y hướng trái, +Z hướng lên.
 
 ## Tạo bản đồ bằng SLAM
 

@@ -5,6 +5,7 @@
   <xacro:property name="wheel_radius" value="0.075"/>
   <xacro:property name="wheel_width" value="0.035"/>
   <xacro:property name="wheel_separation" value="0.32"/>
+  <xacro:property name="wheel_x" value="-0.15"/>
   <xacro:property name="body_length" value="0.40"/>
   <xacro:property name="body_width" value="0.26"/>
   <xacro:property name="body_height" value="0.10"/>
@@ -15,10 +16,11 @@
   <material name="black"><color rgba="0.08 0.08 0.08 1"/></material>
   <material name="silver"><color rgba="0.65 0.65 0.65 1"/></material>
 
+  <!-- Ground frame at the drive axle midpoint; base_link stays at body centre. -->
   <link name="base_footprint"/>
   <joint name="base_joint" type="fixed">
     <parent link="base_footprint"/><child link="base_link"/>
-    <origin xyz="0 0 ${body_z}"/>
+    <origin xyz="${-wheel_x} 0 ${body_z}"/>
   </joint>
   <link name="base_link">
     <visual><geometry><box size="${body_length} ${body_width} ${body_height}"/></geometry><material name="blue"/></visual>
@@ -29,7 +31,7 @@
   <xacro:macro name="wheel" params="side sign">
     <joint name="${side}_wheel_joint" type="continuous">
       <parent link="base_link"/><child link="${side}_wheel_link"/>
-      <origin xyz="0 ${sign * wheel_separation / 2} ${wheel_radius - body_z}"/>
+      <origin xyz="${wheel_x} ${sign * wheel_separation / 2} ${wheel_radius - body_z}"/>
       <axis xyz="0 1 0"/>
       <dynamics damping="0.01" friction="0.0"/>
     </joint>
@@ -46,7 +48,7 @@
   <xacro:wheel side="left" sign="1"/>
   <xacro:wheel side="right" sign="-1"/>
 
-  <!-- Low-friction spherical supports approximate passive casters. -->
+  <!-- A low-friction sphere approximates the front omnidirectional passive caster. -->
   <xacro:macro name="caster" params="name x">
     <joint name="${name}_caster_joint" type="fixed">
       <parent link="base_link"/><child link="${name}_caster_link"/>
@@ -60,7 +62,6 @@
     <gazebo reference="${name}_caster_link"><mu1>0.01</mu1><mu2>0.01</mu2></gazebo>
   </xacro:macro>
   <xacro:caster name="front" x="0.15"/>
-  <xacro:caster name="rear" x="-0.15"/>
 
   <joint name="laser_joint" type="fixed">
     <parent link="base_link"/><child link="laser_frame"/>
