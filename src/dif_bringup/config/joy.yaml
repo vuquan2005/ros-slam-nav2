@@ -1,0 +1,19 @@
+joy_node:
+  ros__parameters:
+    deadzone: 0.12
+    autorepeat_rate: 20.0
+    sticky_buttons: false
+
+teleop_twist_joy_node:
+  ros__parameters:
+    publish_stamped_twist: false
+    require_enable_button: false
+    enable_turbo_button: -1
+    axis_linear:
+      x: 1
+    scale_linear:
+      x: 0.25
+    axis_angular:
+      yaw: 0
+    scale_angular:
+      yaw: 0.5

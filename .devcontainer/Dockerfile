@@ -12,6 +12,9 @@ RUN apt-get update \
         ros-humble-ros-gz ros-humble-xacro \
         ros-humble-robot-state-publisher ros-humble-joint-state-publisher \
         ros-humble-teleop-twist-keyboard \
+        ros-humble-joy ros-humble-teleop-twist-joy \
+        ros-humble-slam-toolbox ros-humble-nav2-map-server \
+        ros-humble-navigation2 ros-humble-nav2-bringup ros-humble-twist-mux \
         libgl1-mesa-dri libegl1-mesa mesa-utils \
     && rm -rf /var/lib/apt/lists/*
 
@@ -22,5 +25,7 @@ RUN groupadd --gid ${USER_GID} ${USERNAME} \
     && chmod 0440 /etc/sudoers.d/${USERNAME}
 
 RUN if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then rosdep init; fi
+ENV USER=${USERNAME} \
+    LOGNAME=${USERNAME}
 USER ${USERNAME}
 WORKDIR /workspaces/ros-dif

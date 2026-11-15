@@ -64,6 +64,47 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard
 
 Dùng `i` để tiến, `,` để lùi, `j`/`l` để quay và `k` để dừng. Teleop chuẩn phát lệnh theo phím bấm; nhấn `k` để dừng trước khi rời terminal. Bản khởi tạo dùng trực tiếp plugin DiffDrive, chưa có watchdog độc lập khi node phát lệnh bị ngắt đột ngột.
 
+## Joystick OpenTX Jumper T20
+
+Chạy task **ROS DIF: joystick teleop** cùng một launch mô phỏng hoặc SLAM.
+Dừng keyboard teleop trước khi dùng joystick. Cấu hình chỉ số trong
+`src/dif_bringup/config/joy.yaml`:
+
+- `axis 1`: tiến/lùi; `axis 0`: quay.
+- Không dùng axis 2 và không cần btn; `require_enable_button: false`.
+- Tối đa 0.25 m/s và 0.5 rad/s, tỷ lệ với độ lệch cần. Đưa axis 0 và axis 1 về giữa để dừng.
+- Dùng trực tiếp `teleop_twist_joy`; không có timeout mất `/joy` trong cấu hình này.
+
+Các chỉ số/dấu cần đối chiếu với `ros2 topic echo /joy` vì SDL có thể khác `jstest-gtk`.
+
+Dev container truyền toàn bộ `/dev/input` vào container và thêm
+GID 104 (nhóm `input` trên host hiện tại). Cắm tay cầm trước khi chọn
+**Dev Containers: Rebuild Container**; thay đổi thiết bị không áp dụng bằng cách
+chỉ mở lại terminal. Nếu đổi host, kiểm tra GID bằng `stat -Lc '%g'` trên thiết bị
+và cập nhật `--group-add` trong `.devcontainer/devcontainer.json`.
+Nếu rút/cắm lại làm đổi device node, tạo lại container để cập nhật ánh xạ thiết bị.
+
+Trong container sau khi tạo lại:
+
+```bash
+colcon build --symlink-install --packages-select dif_bringup
+source install/setup.bash
+ros2 run joy joy_enumerate_devices
+ros2 launch dif_bringup joy.launch.py
+```
+
+Terminal khác:
+
+```bash
+ros2 topic echo /joy
+ros2 topic echo /cmd_vel
+```
+
+Để thử bộ chuyển đổi mà không điều khiển robot, chạy
+`ros2 launch dif_bringup joy.launch.py start_joy:=false cmd_vel:=/cmd_vel_test`.
+Phát Joy giả `[axis 0, axis 1] = [0.0, 1.0]`, `buttons: []` sẽ cho tốc độ tiến 0.25 m/s;
+đưa cả hai axis về 0 sẽ dừng.
+
 ## Kiểm tra sau khi khởi chạy
 
 ```bash
@@ -123,7 +164,6 @@ ros2 launch dif_bringup slam.launch.py gui_config:="$(pwd)/src/dif_gazebo/config
 
 `sim.launch.py` cũng nhận `gui_config:=/duong/dan/gui.config`.
 Để trống tham số sẽ dùng cấu hình mặc định của Gazebo; `gui:=false` bỏ qua GUI config.
-
 
 ```bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard

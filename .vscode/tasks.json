@@ -54,6 +54,16 @@
       }
     },
     {
+      "label": "ROS DIF: joystick teleop",
+      "type": "shell",
+      "command": "source /opt/ros/humble/setup.bash && if [ -f install/setup.bash ]; then source install/setup.bash; fi && ros2 launch dif_bringup joy.launch.py",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
       "label": "ROS DIF: keyboard teleop",
       "type": "shell",
       "command": "source /opt/ros/humble/setup.bash && if [ -f install/setup.bash ]; then source install/setup.bash; fi && ros2 run teleop_twist_keyboard teleop_twist_keyboard",

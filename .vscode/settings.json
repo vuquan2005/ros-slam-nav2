@@ -36,4 +36,19 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.wordWrap": "on"
   },
+  "files.exclude": {
+    "**/.aws": true,
+    "**/.cache": true,
+    "**/.codegraph": true,
+    "**/.codex": true,
+    "**/.mypy_cache": true,
+    "**/.venv": true,
+    "**/__pycache__": true,
+    "**/cmake-build-*": true,
+    "**/temp": true,
+    "**/tmp": true,
+    "**/build": true,
+    "install":true,
+    "log":true
+  },
 }

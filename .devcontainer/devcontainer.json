@@ -12,7 +12,9 @@
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/ros-dif,type=bind",
   "runArgs": [
     "--network=host",
-    "--ipc=host"
+    "--ipc=host",
+    "--device=/dev/input:/dev/input",
+    "--group-add=104"
   ],
   "mounts": [
     "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind",
