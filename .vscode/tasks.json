@@ -24,17 +24,7 @@
       }
     },
     {
-      "label": "ROS DIF: simulation",
-      "type": "shell",
-      "command": "source /opt/ros/humble/setup.bash && if [ -f install/setup.bash ]; then source install/setup.bash; fi && ros2 launch dif_bringup sim.launch.py gui_config:=\"${workspaceFolder}/src/dif_gazebo/config/gui.config\"",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "dedicated"
-      }
-    },
-    {
-      "label": "ROS DIF: SLAM mapping",
+      "label": "ROS DIF: Gazebo",
       "type": "shell",
       "command": "source /opt/ros/humble/setup.bash && if [ -f install/setup.bash ]; then source install/setup.bash; fi && ros2 launch dif_bringup slam.launch.py gui_config:=\"${workspaceFolder}/src/dif_gazebo/config/gui.config\"",
       "problemMatcher": [],
