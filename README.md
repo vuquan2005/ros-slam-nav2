@@ -6,7 +6,7 @@ Bộ khung ROS 2 Humble và Gazebo Fortress cho robot vi sai hai bánh chủ đ�
 
 - Mô hình hình học đơn giản: hai bánh chủ động ở phía sau (x = -0.15 m so với tâm thân) và một bánh đỡ đa hướng phía trước (x = +0.15 m), mô phỏng bằng cầu ma sát thấp.
 - Plugin DiffDrive của Gazebo điều khiển hai khớp bánh; odometry từ chuyển động bánh trong mô phỏng.
-- LiDAR 360 độ, 720 mẫu, 10 Hz; phòng 6 × 6 m với một vật cản.
+- LiDAR 360 độ, 720 mẫu, 10 Hz. World nhà hàng rộng khoảng 12 × 9 m, có sảnh, khu bàn ăn và lối phục vụ. Hai cửa rộng 1,5 m và 1,4 m tạo hai đường đi giữa khu bàn ăn và lối phục vụ.
 - Bridge `/clock`, `/cmd_vel`, `/odom`, `/tf`, `/joint_states`, `/scan` và cấu hình RViz.
 - SLAM Toolbox tạo bản đồ từ LiDAR; chưa tích hợp điều hướng Nav2, nhiệm vụ phục vụ bàn hoặc driver phần cứng.
 
@@ -175,7 +175,7 @@ ros2 launch dif_bringup slam.launch.py gui_config:="$(pwd)/src/dif_gazebo/config
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
 ```
 
-Khi bản đồ rõ tường và vật cản, giữ SLAM đang chạy và lưu từ terminal khác tại thư mục workspace:
+Lái vòng qua xe đẩy, qua cửa phía bắc vào lối phục vụ, rồi trở lại qua cửa phía nam. Đi thêm một vòng qua sảnh và khu bàn ăn để quét bàn, quầy và các góc khuất sau vách. Khi bản đồ đã rõ, giữ SLAM đang chạy và lưu từ terminal khác tại thư mục workspace:
 
 ```bash
 mkdir -p maps

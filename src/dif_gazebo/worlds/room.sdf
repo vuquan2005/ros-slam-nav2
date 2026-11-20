@@ -15,25 +15,121 @@
       <collision name="collision"><geometry><plane><normal>0 0 1</normal><size>20 20</size></plane></geometry></collision>
       <visual name="visual"><geometry><plane><normal>0 0 1</normal><size>20 20</size></plane></geometry><material><ambient>0.7 0.7 0.7 1</ambient><diffuse>0.7 0.7 0.7 1</diffuse></material></visual>
     </link></model>
-    <model name="north"><static>true</static><pose>0 3 0.5 0 0 0</pose><link name="link">
-      <collision name="collision"><geometry><box><size>6 0.1 1</size></box></geometry></collision>
-      <visual name="visual"><geometry><box><size>6 0.1 1</size></box></geometry><material><ambient>0.5 0.6 0.7 1</ambient><diffuse>0.5 0.6 0.7 1</diffuse></material></visual>
+    <model name="north"><static>true</static><pose>0 4.5 0.6 0 0 0</pose><link name="link">
+      <collision name="collision"><geometry><box><size>12.14 0.14 1.2</size></box></geometry></collision>
+      <visual name="visual"><geometry><box><size>12.14 0.14 1.2</size></box></geometry><material><ambient>0.5 0.6 0.7 1</ambient><diffuse>0.5 0.6 0.7 1</diffuse></material></visual>
     </link></model>
-    <model name="south"><static>true</static><pose>0 -3 0.5 0 0 0</pose><link name="link">
-      <collision name="collision"><geometry><box><size>6 0.1 1</size></box></geometry></collision>
-      <visual name="visual"><geometry><box><size>6 0.1 1</size></box></geometry><material><ambient>0.5 0.6 0.7 1</ambient><diffuse>0.5 0.6 0.7 1</diffuse></material></visual>
+    <model name="south"><static>true</static><pose>0 -4.5 0.6 0 0 0</pose><link name="link">
+      <collision name="collision"><geometry><box><size>12.14 0.14 1.2</size></box></geometry></collision>
+      <visual name="visual"><geometry><box><size>12.14 0.14 1.2</size></box></geometry><material><ambient>0.5 0.6 0.7 1</ambient><diffuse>0.5 0.6 0.7 1</diffuse></material></visual>
     </link></model>
-    <model name="east"><static>true</static><pose>3 0 0.5 0 0 0</pose><link name="link">
-      <collision name="collision"><geometry><box><size>0.1 6 1</size></box></geometry></collision>
-      <visual name="visual"><geometry><box><size>0.1 6 1</size></box></geometry><material><ambient>0.5 0.6 0.7 1</ambient><diffuse>0.5 0.6 0.7 1</diffuse></material></visual>
+    <model name="east"><static>true</static><pose>6 0 0.6 0 0 0</pose><link name="link">
+      <collision name="collision"><geometry><box><size>0.14 9 1.2</size></box></geometry></collision>
+      <visual name="visual"><geometry><box><size>0.14 9 1.2</size></box></geometry><material><ambient>0.5 0.6 0.7 1</ambient><diffuse>0.5 0.6 0.7 1</diffuse></material></visual>
     </link></model>
-    <model name="west"><static>true</static><pose>-3 0 0.5 0 0 0</pose><link name="link">
-      <collision name="collision"><geometry><box><size>0.1 6 1</size></box></geometry></collision>
-      <visual name="visual"><geometry><box><size>0.1 6 1</size></box></geometry><material><ambient>0.5 0.6 0.7 1</ambient><diffuse>0.5 0.6 0.7 1</diffuse></material></visual>
+    <model name="west"><static>true</static><pose>-6 0 0.6 0 0 0</pose><link name="link">
+      <collision name="collision"><geometry><box><size>0.14 9 1.2</size></box></geometry></collision>
+      <visual name="visual"><geometry><box><size>0.14 9 1.2</size></box></geometry><material><ambient>0.5 0.6 0.7 1</ambient><diffuse>0.5 0.6 0.7 1</diffuse></material></visual>
     </link></model>
-    <model name="obstacle"><static>true</static><pose>1.5 0.5 0.4 0 0 0</pose><link name="link">
-      <collision name="collision"><geometry><box><size>0.5 0.5 0.8</size></box></geometry></collision>
-      <visual name="visual"><geometry><box><size>0.5 0.5 0.8</size></box></geometry><material><ambient>0.5 0.6 0.7 1</ambient><diffuse>0.5 0.6 0.7 1</diffuse></material></visual>
-    </link></model>
+    <model name="lobby_divider">
+      <static>true</static>
+      <pose>-4.05 -1.25 0.6 0 0 0</pose>
+      <link name="wall">
+        <collision name="collision"><geometry><box><size>3.9 0.14 1.2</size></box></geometry></collision>
+        <visual name="visual"><geometry><box><size>3.9 0.14 1.2</size></box></geometry><material><ambient>0.34 0.54 0.51 1</ambient><diffuse>0.34 0.54 0.51 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <!-- North and south passages connect the dining area to the service aisle. -->
+    <model name="service_partition">
+      <static>true</static>
+      <pose>2.15 0 0.6 0 0 0</pose>
+      <link name="south_segment">
+        <pose>0 -3.65 0 0 0 0</pose>
+        <collision name="collision"><geometry><box><size>0.14 1.7 1.2</size></box></geometry></collision>
+        <visual name="visual"><geometry><box><size>0.14 1.7 1.2</size></box></geometry><material><ambient>0.34 0.54 0.51 1</ambient><diffuse>0.34 0.54 0.51 1</diffuse></material></visual>
+      </link>
+      <link name="middle_segment">
+        <pose>0 -0.075 0 0 0 0</pose>
+        <collision name="collision"><geometry><box><size>0.14 2.65 1.2</size></box></geometry></collision>
+        <visual name="visual"><geometry><box><size>0.14 2.65 1.2</size></box></geometry><material><ambient>0.34 0.54 0.51 1</ambient><diffuse>0.34 0.54 0.51 1</diffuse></material></visual>
+      </link>
+      <link name="north_segment">
+        <pose>0 3.625 0 0 0 0</pose>
+        <collision name="collision"><geometry><box><size>0.14 1.75 1.2</size></box></geometry></collision>
+        <visual name="visual"><geometry><box><size>0.14 1.75 1.2</size></box></geometry><material><ambient>0.34 0.54 0.51 1</ambient><diffuse>0.34 0.54 0.51 1</diffuse></material></visual>
+      </link>
+      <link name="alcove_side">
+        <pose>0.825 0.8 0 0 0 0</pose>
+        <collision name="collision"><geometry><box><size>1.79 0.14 1.2</size></box></geometry></collision>
+        <visual name="visual"><geometry><box><size>1.79 0.14 1.2</size></box></geometry><material><ambient>0.34 0.54 0.51 1</ambient><diffuse>0.34 0.54 0.51 1</diffuse></material></visual>
+      </link>
+      <link name="alcove_return">
+        <pose>1.65 0.25 0 0 0 0</pose>
+        <collision name="collision"><geometry><box><size>0.14 1.1 1.2</size></box></geometry></collision>
+        <visual name="visual"><geometry><box><size>0.14 1.1 1.2</size></box></geometry><material><ambient>0.34 0.54 0.51 1</ambient><diffuse>0.34 0.54 0.51 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <model name="reception_counter">
+      <static>true</static>
+      <pose>-3.65 -3.2 0.42 0 0 0</pose>
+      <link name="counter">
+        <collision name="base"><geometry><box><size>1.55 0.6 0.84</size></box></geometry></collision>
+        <visual name="base_visual"><geometry><box><size>1.55 0.6 0.84</size></box></geometry><material><ambient>0.43 0.26 0.16 1</ambient><diffuse>0.43 0.26 0.16 1</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="service_counter">
+      <static>true</static>
+      <pose>5.51 0 0.42 0 0 0</pose>
+      <link name="counter">
+        <collision name="base"><geometry><box><size>0.84 1.85 0.84</size></box></geometry></collision>
+        <visual name="base_visual"><geometry><box><size>0.84 1.85 0.84</size></box></geometry><material><ambient>0.43 0.26 0.16 1</ambient><diffuse>0.43 0.26 0.16 1</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="dining_booth">
+      <static>true</static>
+      <pose>-3.7 1.45 0 0 0 0</pose>
+      <link name="table">
+        <collision name="pedestal"><pose>0 0 0.35 0 0 0</pose><geometry><box><size>0.5 0.8 0.7</size></box></geometry></collision>
+        <visual name="pedestal_visual"><pose>0 0 0.35 0 0 0</pose><geometry><box><size>0.5 0.8 0.7</size></box></geometry><material><ambient>0.36 0.25 0.18 1</ambient><diffuse>0.36 0.25 0.18 1</diffuse></material></visual>
+      </link>
+      <link name="west_bench">
+        <pose>-0.78 0 0.23 0 0 0</pose>
+        <collision name="collision"><geometry><box><size>0.42 1.35 0.46</size></box></geometry></collision>
+        <visual name="visual"><geometry><box><size>0.42 1.35 0.46</size></box></geometry><material><ambient>0.27 0.46 0.61 1</ambient><diffuse>0.27 0.46 0.61 1</diffuse></material></visual>
+      </link>
+      <link name="east_bench">
+        <pose>0.78 0 0.23 0 0 0</pose>
+        <collision name="collision"><geometry><box><size>0.42 1.35 0.46</size></box></geometry></collision>
+        <visual name="visual"><geometry><box><size>0.42 1.35 0.46</size></box></geometry><material><ambient>0.27 0.46 0.61 1</ambient><diffuse>0.27 0.46 0.61 1</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="round_table">
+      <static>true</static>
+      <pose>-1.8 3 0 0 0 0</pose>
+      <link name="table">
+        <collision name="pedestal"><pose>0 0 0.35 0 0 0</pose><geometry><cylinder><radius>0.28</radius><length>0.7</length></cylinder></geometry></collision>
+        <visual name="pedestal_visual"><pose>0 0 0.35 0 0 0</pose><geometry><cylinder><radius>0.28</radius><length>0.7</length></cylinder></geometry><material><ambient>0.36 0.25 0.18 1</ambient><diffuse>0.36 0.25 0.18 1</diffuse></material></visual>
+      </link>
+      <link name="west_stool">
+        <pose>-0.72 0 0.22 0 0 0</pose>
+        <collision name="collision"><geometry><cylinder><radius>0.19</radius><length>0.44</length></cylinder></geometry></collision>
+        <visual name="visual"><geometry><cylinder><radius>0.19</radius><length>0.44</length></cylinder></geometry><material><ambient>0.27 0.46 0.61 1</ambient><diffuse>0.27 0.46 0.61 1</diffuse></material></visual>
+      </link>
+      <link name="east_stool">
+        <pose>0.72 0 0.22 0 0 0</pose>
+        <collision name="collision"><geometry><cylinder><radius>0.19</radius><length>0.44</length></cylinder></geometry></collision>
+        <visual name="visual"><geometry><cylinder><radius>0.19</radius><length>0.44</length></cylinder></geometry><material><ambient>0.27 0.46 0.61 1</ambient><diffuse>0.27 0.46 0.61 1</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="supply_cart">
+      <static>true</static>
+      <pose>0.9 0.85 0.32 0 0 0</pose>
+      <link name="cart">
+        <collision name="collision"><geometry><box><size>0.6 0.64 0.64</size></box></geometry></collision>
+        <visual name="visual"><geometry><box><size>0.6 0.64 0.64</size></box></geometry><material><ambient>0.78 0.44 0.19 1</ambient><diffuse>0.78 0.44 0.19 1</diffuse></material></visual>
+      </link>
+    </model>
   </world>
 </sdf>
