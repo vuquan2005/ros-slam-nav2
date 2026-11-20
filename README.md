@@ -8,7 +8,7 @@ Bộ khung ROS 2 Humble và Gazebo Fortress cho robot vi sai hai bánh chủ đ�
 - Plugin DiffDrive của Gazebo điều khiển hai khớp bánh; odometry từ chuyển động bánh trong mô phỏng.
 - LiDAR 360 độ, 720 mẫu, 10 Hz. World nhà hàng rộng khoảng 12 × 9 m, có sảnh, khu bàn ăn và lối phục vụ. Hai cửa rộng 1,5 m và 1,4 m tạo hai đường đi giữa khu bàn ăn và lối phục vụ.
 - Bridge `/clock`, `/cmd_vel`, `/odom`, `/tf`, `/joint_states`, `/scan` và cấu hình RViz.
-- SLAM Toolbox tạo bản đồ từ LiDAR; chưa tích hợp điều hướng Nav2, nhiệm vụ phục vụ bàn hoặc driver phần cứng.
+- SLAM Toolbox tạo bản đồ từ LiDAR trong lúc Nav2 điều hướng tới đích được chọn trong RViz.
 
 Kích thước, khối lượng và thông số cảm biến là giá trị khởi tạo, chưa được hiệu chỉnh theo robot thực. Sửa tại `src/dif_description/urdf/dif.urdf.xacro` và `gazebo.xacro`.
 
@@ -197,6 +197,20 @@ Cấu hình tại `src/dif_bringup/config/slam.yaml`, dựa trên
 Ngưỡng góc quay là 0.1 rad. Ngưỡng tịnh tiến đặt 0.0 m vì bộ lọc scan bên ngoài của
 SLAM Toolbox Humble chỉ xét khoảng cách tịnh tiến; đặt khác 0 sẽ bỏ qua scan khi robot quay tại chỗ.
 
+## Điều hướng trong lúc lập bản đồ
+
+Sau khi build workspace, chạy trong devcontainer:
+
+```bash
+source install/setup.bash
+ros2 launch dif_bringup nav.launch.py
+```
+
+Đợi bản đồ hiện và trạng thái **Navigation** báo **Active**. Chọn **Nav2 Goal**,
+nhấn vào vùng trống đã quét, rồi kéo mũi tên theo hướng robot cần quay khi tới đích.
+**Planned Path** hiển thị đường Nav2 đã tính. Có thể bật **Local Costmap** để
+xem vùng robot đang tránh. Gửi đích từ RViz để Nav2 điều khiển `/cmd_vel` trong phiên này.
+
 ## Kiểm tra cấu trúc trước khi chạy
 
 Trong môi trường có `xacro` và `python3-yaml`:
@@ -213,4 +227,4 @@ Bộ kiểm tra xác nhận cây TF liên thông, quán tính hợp lệ, hình 
 - [Báo cáo gốc và tài nguyên](docs/README.md).
 - [Lộ trình triển khai](docs/chuyen-doi-robot-vi-sai.md).
 
-Kiểm tra chuyển động và dữ liệu LiDAR trước, sau đó chạy SLAM, lưu bản đồ, tích hợp định vị/Nav2 và giao tiếp phần cứng. Tham khảo cấu hình plugin từ [Gazebo DiffDrive](https://gazebosim.org/api/gazebo/6/classignition_1_1gazebo_1_1systems_1_1DiffDrive.html) và [Gazebo Sensors](https://gazebosim.org/docs/fortress/sensors/).
+Tham khảo cấu hình plugin từ [Gazebo DiffDrive](https://gazebosim.org/api/gazebo/6/classignition_1_1gazebo_1_1systems_1_1DiffDrive.html) và [Gazebo Sensors](https://gazebosim.org/docs/fortress/sensors/).

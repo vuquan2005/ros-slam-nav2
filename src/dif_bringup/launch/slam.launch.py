@@ -18,6 +18,8 @@ def generate_launch_description():
         DeclareLaunchArgument('gui_config', default_value='',
                              description='Gazebo GUI config path; empty uses Gazebo defaults'),
         DeclareLaunchArgument('rviz', default_value='true', choices=['true', 'false']),
+        DeclareLaunchArgument('rviz_config', default_value=os.path.join(
+            description, 'rviz', 'slam.rviz')),
         DeclareLaunchArgument('world', default_value=os.path.join(gazebo, 'worlds', 'room.sdf')),
         DeclareLaunchArgument('slam_params_file', default_value=os.path.join(
             bringup, 'config', 'slam.yaml')),
@@ -28,7 +30,7 @@ def generate_launch_description():
                 'gui_config': LaunchConfiguration('gui_config'),
                 'rviz': LaunchConfiguration('rviz'),
                 'world': LaunchConfiguration('world'),
-                'rviz_config': os.path.join(description, 'rviz', 'slam.rviz'),
+                'rviz_config': LaunchConfiguration('rviz_config'),
             }.items(),
         ),
         IncludeLaunchDescription(
