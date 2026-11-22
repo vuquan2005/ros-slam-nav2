@@ -23,9 +23,39 @@
       }
     },
     {
-      "label": "ROS DIF: Gazebo",
+      "label": "ROS DIF: Navigation",
       "type": "shell",
-      "command": "source /opt/ros/humble/setup.bash && if [ -f install/setup.bash ]; then source install/setup.bash; fi && ros2 launch dif_bringup nav.launch.py gui_config:=\"${workspaceFolder}/src/dif_gazebo/config/gui.config\"",
+      "command": "source /opt/ros/humble/setup.bash && if [ -f install/setup.bash ]; then source install/setup.bash; fi && export IGN_IP=127.0.0.1 GZ_IP=127.0.0.1 && ros2 launch dif_bringup nav.launch.py gui_config:=\"${workspaceFolder}/src/dif_gazebo/config/gui.config\"",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "ROS DIF: Navigation (headless - faster)",
+      "type": "shell",
+      "command": "source /opt/ros/humble/setup.bash && if [ -f install/setup.bash ]; then source install/setup.bash; fi && export IGN_IP=127.0.0.1 GZ_IP=127.0.0.1 && ros2 launch dif_bringup nav.launch.py gui:=false",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "ROS DIF: SLAM mapping",
+      "type": "shell",
+      "command": "source /opt/ros/humble/setup.bash && if [ -f install/setup.bash ]; then source install/setup.bash; fi && export IGN_IP=127.0.0.1 GZ_IP=127.0.0.1 && ros2 launch dif_bringup slam.launch.py gui_config:=\"${workspaceFolder}/src/dif_gazebo/config/gui.config\"",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "ROS DIF: Gazebo (sim only)",
+      "type": "shell",
+      "command": "source /opt/ros/humble/setup.bash && if [ -f install/setup.bash ]; then source install/setup.bash; fi && export IGN_IP=127.0.0.1 GZ_IP=127.0.0.1 && ros2 launch dif_bringup sim.launch.py gui_config:=\"${workspaceFolder}/src/dif_gazebo/config/gui.config\"",
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",

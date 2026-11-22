@@ -15,6 +15,10 @@ else
     PS1='\u@\h:\w\$ '
 fi
 
+# Set loopback transport IP for Ignition / Gazebo Fortress
+export IGN_IP=127.0.0.1
+export GZ_IP=127.0.0.1
+
 # Load the ROS underlay before any workspace overlay.
 if [ -f "/opt/ros/${ROS_DISTRO:-humble}/setup.bash" ]; then
     source "/opt/ros/${ROS_DISTRO:-humble}/setup.bash"

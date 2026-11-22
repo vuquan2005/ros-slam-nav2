@@ -4,7 +4,14 @@ import shlex
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, RegisterEventHandler, EmitEvent, OpaqueFunction
+from launch.actions import (
+    DeclareLaunchArgument,
+    EmitEvent,
+    IncludeLaunchDescription,
+    OpaqueFunction,
+    RegisterEventHandler,
+    SetEnvironmentVariable,
+)
 from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessExit
 from launch.events import Shutdown
@@ -15,6 +22,10 @@ from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
+    # Bind Ignition / Gazebo transport to localhost to prevent multi-NIC discovery timeout
+    os.environ.setdefault('IGN_IP', '127.0.0.1')
+    os.environ.setdefault('GZ_IP', '127.0.0.1')
+
     description = get_package_share_directory('dif_description')
     gazebo = get_package_share_directory('dif_gazebo')
     ros_gz = get_package_share_directory('ros_gz_sim')
@@ -51,6 +62,8 @@ def generate_launch_description():
         return []
 
     return LaunchDescription([
+        SetEnvironmentVariable('IGN_IP', '127.0.0.1'),
+        SetEnvironmentVariable('GZ_IP', '127.0.0.1'),
         DeclareLaunchArgument('world', default_value=os.path.join(gazebo, 'worlds', 'room.sdf'),
                               description='SDF world with world name default'),
         DeclareLaunchArgument('gui', default_value='true', choices=['true', 'false']),
