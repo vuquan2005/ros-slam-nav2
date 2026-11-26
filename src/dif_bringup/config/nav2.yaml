@@ -94,6 +94,7 @@ local_costmap:
       always_send_full_costmap: true
       # Cover the chassis and both wheels, measured from the rear axle.
       footprint: "[[-0.08, -0.18], [0.35, -0.18], [0.35, 0.18], [-0.08, 0.18]]"
+      footprint_padding: 0.02
       plugins: [obstacle_layer, inflation_layer]
       obstacle_layer:
         plugin: nav2_costmap_2d::ObstacleLayer
@@ -122,6 +123,7 @@ global_costmap:
       publish_frequency: 1.0
       track_unknown_space: true
       footprint: "[[-0.08, -0.18], [0.35, -0.18], [0.35, 0.18], [-0.08, 0.18]]"
+      footprint_padding: 0.02
       # SLAM supplies the global map; direct scan processing stays local.
       plugins: [static_layer, inflation_layer]
       static_layer:
@@ -130,7 +132,8 @@ global_costmap:
         map_subscribe_transient_local: true
       inflation_layer:
         plugin: nav2_costmap_2d::InflationLayer
-        inflation_radius: 0.40
+        # Cover the padded footprint's 0.407 m circumscribed radius for Smac.
+        inflation_radius: 0.45
         cost_scaling_factor: 3.5
 
 behavior_server:

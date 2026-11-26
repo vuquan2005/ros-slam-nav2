@@ -54,4 +54,5 @@ rosdep install --from-paths src --ignore-src --rosdistro humble -y
 colcon build --symlink-install --base-paths src
 
 printf '\nCài đặt hoàn tất. Chạy mô phỏng từ thư mục dự án bằng các lệnh sau:\n'
-printf 'source install/setup.bash\nros2 launch dif_bringup sim.launch.py\n'
+printf 'source install/setup.bash\n'
+printf 'ros2 launch dif_bringup sim.launch.py\n'
