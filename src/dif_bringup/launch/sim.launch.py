@@ -76,7 +76,7 @@ def generate_launch_description():
             package='robot_state_publisher', executable='robot_state_publisher',
             parameters=[{'use_sim_time': True, 'robot_description': ParameterValue(
                 Command([FindExecutable(name='xacro'), ' ',
-                         os.path.join(description, 'urdf', 'dif.urdf.xacro'),
+                         shlex.quote(os.path.join(description, 'urdf', 'dif.urdf.xacro')),
                          ' simulation:=true']), value_type=str)}],
             output='screen',
         ),

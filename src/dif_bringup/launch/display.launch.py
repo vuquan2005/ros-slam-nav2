@@ -1,5 +1,6 @@
 """Inspect the URDF without starting Gazebo."""
 import os
+import shlex
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
@@ -14,7 +15,7 @@ def generate_launch_description():
         Node(package='robot_state_publisher', executable='robot_state_publisher',
              parameters=[{'robot_description': ParameterValue(Command([
                  FindExecutable(name='xacro'), ' ',
-                 os.path.join(description, 'urdf', 'dif.urdf.xacro'),
+                 shlex.quote(os.path.join(description, 'urdf', 'dif.urdf.xacro')),
              ]), value_type=str)}]),
         Node(package='joint_state_publisher', executable='joint_state_publisher'),
         Node(package='rviz2', executable='rviz2', arguments=[
